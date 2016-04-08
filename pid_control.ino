@@ -1,0 +1,197 @@
+/*
+#############################################################
+#
+# Control PID 
+#
+# Description:
+#   Implementacion de un control PID con parametros 
+#   ajustables a traves de una PC
+#
+# Author:
+#   Hugo Arboleas, <harboleas@citedef.gob.ar>
+#
+#############################################################
+# 
+# Copyright 2015 Hugo Arboleas
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+#############################################################################
+*/
+
+
+//////////////////////////////
+///// Definicion de pines
+#define pin_mot_A 9
+#define pin_mot_B 8
+#define pin_pv 0
+#define pin_led 13
+
+/////////////////////////////////////
+// Variables y parametros 
+
+bool pid_on = 0; 
+
+unsigned char Ts = 10;   // Tiempo de muestreo en miliseg
+
+union byte_double
+{
+    byte data[4];   
+    double value;
+} Kp, Ki, Kd;     // Ganancias del PID
+
+union byte_int
+{
+    byte data[2];
+    int value;
+} sp, pv;         // Set point y process variable
+
+double e, e_1;    // Error actual y anterior 
+double acum_e;    // Acumulacion de los errores ponderados (integral)
+double d_e;       // Variacion del error (derivada)
+double u;         // Senal de control 
+
+// Serial port data
+unsigned char data[16];
+unsigned char i = 0;
+
+///////////////////////////////////////
+
+unsigned long t = 0, t_1 = 0; // para la medicion del delta t  
+
+////////////////////////////////////////
+
+
+/////////////////////////////////
+// Limites de la senal de control
+#define U_MAX 255    
+#define U_MIN -255
+
+
+void setup()
+{
+    Serial.begin(115200);    // Inicializar puerto serie
+
+    pinMode(pin_mot_A, OUTPUT);
+    pinMode(pin_mot_B, OUTPUT);
+    pinMode(pin_led, OUTPUT);
+
+    while(!Serial);   // Espera hasta que el puerto este listo 
+}
+
+
+void pid()
+{
+
+    t = millis();     // tiempo actual
+
+    if ((t - t_1) >= Ts)   // Muestrea cada Ts  
+    {
+        t_1 = t;   // Actualiza t_1 para determinar la siguiente muestra 
+
+        pv.value = analogRead(pin_pv); // obtiene process variable     
+
+        e = sp.value - pv.value;    // error actual 
+        
+        if (pid_on)
+        {
+
+            acum_e = acum_e + Ki.value * e;  // Acumula los errores ponderados
+
+            if (acum_e > U_MAX)
+                acum_e = U_MAX;
+            else if (acum_e < U_MIN)
+                acum_e = U_MIN;
+
+            d_e = e - e_1; // Delta error 
+
+            e_1 = e;  // Actualiza el error anterior para la sig. muestra
+
+            // Senal de control 
+            u = Kp.value * e + acum_e + Kd.value * d_e;
+
+            if (u > U_MAX)
+                u = U_MAX;
+            else if (u < U_MIN)
+                u = U_MIN;
+
+                   
+            if (u >= 0)
+            {
+                analogWrite(pin_mot_A, u);
+                analogWrite(pin_mot_B, 0);
+            }
+            else
+            {
+                analogWrite(pin_mot_A, 0);
+                analogWrite(pin_mot_B, -u);
+            }
+        }        
+        else   // PID Off
+        {
+                analogWrite(pin_mot_A, 0);
+                analogWrite(pin_mot_B, 0);
+                e_1 = e;   // Actualiza error anterior
+                acum_e = 0;
+                d_e = 0;
+        }
+
+        Serial.write(pv.data, 2); // Envia a la GUI el valor de pv
+    }
+
+}
+
+
+void loop()
+{
+   
+    pid();
+  
+}
+
+void serialEvent()
+{
+    // Obtiene los parametros de la GUI
+
+    data[i] = Serial.read();
+    i++;
+    if(i == 16)
+    {
+        i = 0;
+
+        pid_on = (bool) data[0];     
+
+        Ts = data[1];
+
+        for(int j=0; j < 4; j++)
+            Kp.data[j] = data[2+j];
+
+        for(int j=0; j < 4; j++)
+            Ki.data[j] = data[6+j];
+
+        for(int j=0; j < 4; j++)
+            Kd.data[j] = data[10+j];
+
+        for(int j=0; j < 2; j++)
+            sp.data[j] = data[14+j];
+
+        Ki.value = Ki.value * (Ts * 1e-3);
+        Kd.value = Kd.value / (Ts * 1e-3);
+        
+        digitalWrite(pin_led, pid_on);
+    }    
+}
+
+
+/* vim: set ts=8 sw=4 tw=0 et :*/
