@@ -39,6 +39,7 @@ from main_window import *
 import sys
 import serial
 import struct
+import time
 
 ##################################################################
 
@@ -76,6 +77,14 @@ class App(QtGui.QMainWindow) :
         self.main_win.pid_on.setVisible(False)
         
         try :
+            # Provoco un reset del Arduino para una conexion limpia
+            arduino = serial.Serial("/dev/ttyACM0")
+            arduino.setDTR(False)
+            time.sleep(1)
+            arduino.flushInput()
+            arduino.setDTR(True)
+            arduino.close()
+
             self.port = serial.Serial("/dev/ttyACM0", 115200, timeout = 0)    
         except :
             self.port = None
