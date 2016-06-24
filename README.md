@@ -19,15 +19,14 @@ Circuito :
 ![circuito](circuito.jpg)
 
 Nota : 
-La unica ventaja de este driver, con un solo transistor, es su 
-simpleza, ya que produce una asimetria en el control al no
+Este driver, con un solo transistor, produce una asimetria en el control al no
 poder invertir la polaridad del motor.
 
 Soporte del motor : 
 
 ![soporte](soporte/ensamblaje.jpg)
 
-El soporte tambien esta en [thingiverse](http://www.thingiverse.com/thing:1643604)
+El soporte tambien esta en http://www.thingiverse.com/thing:1643718
 
 ![foto](soporte/foto.jpg)
 
