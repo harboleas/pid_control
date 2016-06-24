@@ -1,7 +1,5 @@
 syntax: glob
 
-build/
-dist/
 *.pyc
-*.egg-info
+*.fcstd1
 
