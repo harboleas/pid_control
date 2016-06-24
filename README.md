@@ -14,7 +14,20 @@ Paquetes necesarios :
 * python-serial
 * arduino
 
+Circuito :
+
 ![circuito](circuito.jpg)
 
-![foto](foto.jpg)
+Nota : 
+La unica ventaja de este driver, con un solo transistor, es su 
+simpleza, ya que produce una asimetria en el control al no
+poder invertir la polaridad del motor.
+
+Soporte del motor : 
+
+![soporte](soporte/ensamblaje.jpg)
+
+El soporte tambien esta en [thingiverse](www.thingiverse.com/thing:1643604)
+
+![foto](soporte/foto.jpg)
 
