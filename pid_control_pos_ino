@@ -4,12 +4,8 @@
 # Control PID 
 #
 # Description:
-#   Implementacion de un control PID en un Arduino Nano con 
-#   parametros ajustables a traves de una GUI 
-#
-#   Nota : Al utilizar un solo Mosfet como driver del motor,
-#   no puedo invertir la polaridad y el control resulta
-#   asimetrico.
+#   Implementacion de un control PID en un Arduino MEGA con 
+#   parametros ajustables a traves de una PC
 #
 # Author:
 #   Hugo Arboleas <harboleas@citedef.gob.ar>
@@ -34,10 +30,12 @@
 #############################################################################
 */
 
+
 //////////////////////////////
 ///// Definicion de pines
-#define pin_mot_A 9    
-#define pin_pv 3
+#define pin_mot_A 9
+#define pin_mot_B 8
+#define pin_pv 0
 #define pin_led 13
 
 /////////////////////////////////////
@@ -45,7 +43,7 @@
 
 bool pid_on = 0; 
 
-unsigned char Ts = 15;   // Tiempo de muestreo en miliseg
+unsigned char Ts = 10;   // Tiempo de muestreo en miliseg
 
 union byte_double
 {
@@ -64,15 +62,13 @@ double acum_e;    // Acumulacion de los errores ponderados (integral)
 double d_e;       // Variacion del error (derivada)
 double u;         // Senal de control 
 
-volatile unsigned int cont_rpm;
-
 // Serial port data
 unsigned char data[16];
 unsigned char i = 0;
 
 ///////////////////////////////////////
 
-unsigned long t = 0, t_1 = 0; // para la medicion del delta t de muestreo 
+unsigned long t = 0, t_1 = 0; // para la medicion del delta t  
 
 ////////////////////////////////////////
 
@@ -80,7 +76,7 @@ unsigned long t = 0, t_1 = 0; // para la medicion del delta t de muestreo
 /////////////////////////////////
 // Limites de la senal de control
 #define U_MAX 255    
-#define U_MIN 0
+#define U_MIN -255
 
 
 void setup()
@@ -88,16 +84,11 @@ void setup()
     Serial.begin(115200);    // Inicializar puerto serie
 
     pinMode(pin_mot_A, OUTPUT);
+    pinMode(pin_mot_B, OUTPUT);
     pinMode(pin_led, OUTPUT);
-    pinMode(pin_pv, INPUT);
-    attachInterrupt(1, contar, RISING);
 
 }
 
-void contar()
-{
-    cont_rpm++;
-}
 
 void pid()
 {
@@ -108,8 +99,8 @@ void pid()
     {
         t_1 = t;   // Actualiza t_1 para determinar la siguiente muestra 
 
-        pv.value = 60 * (cont_rpm / 15.0) / (Ts*1e-3); // obtiene la process variable (rpm del motor)     
-        cont_rpm = 0;
+        pv.value = analogRead(pin_pv); // obtiene process variable     
+
         e = sp.value - pv.value;    // error actual 
         
         if (pid_on)
@@ -134,11 +125,22 @@ void pid()
             else if (u < U_MIN)
                 u = U_MIN;
 
-            analogWrite(pin_mot_A, u);
+                   
+            if (u >= 0)
+            {
+                analogWrite(pin_mot_A, u);
+                analogWrite(pin_mot_B, 0);
+            }
+            else
+            {
+                analogWrite(pin_mot_A, 0);
+                analogWrite(pin_mot_B, -u);
+            }
         }        
         else   // PID Off
         {
                 analogWrite(pin_mot_A, 0);
+                analogWrite(pin_mot_B, 0);
                 e_1 = e;   // Actualiza error anterior
                 acum_e = 0;
                 d_e = 0;

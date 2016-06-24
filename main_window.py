@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'main_window.ui'
 #
-# Created: Mon Nov  4 11:24:06 2013
-#      by: PyQt4 UI code generator 4.9.3
+# Created: Wed Jun 15 12:09:22 2016
+#      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -13,16 +13,25 @@ from PyQt4.Qwt5 import QwtPlot
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(1002, 685)
+        MainWindow.resize(1251, 901)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.pv = QtGui.QLCDNumber(self.centralwidget)
-        self.pv.setGeometry(QtCore.QRect(886, 130, 61, 31))
+        self.pv.setGeometry(QtCore.QRect(990, 120, 81, 31))
         font = QtGui.QFont()
         font.setBold(False)
         font.setWeight(50)
@@ -30,18 +39,19 @@ class Ui_MainWindow(object):
         self.pv.setFont(font)
         self.pv.setFrameShape(QtGui.QFrame.Panel)
         self.pv.setFrameShadow(QtGui.QFrame.Plain)
-        self.pv.setNumDigits(4)
-        self.pv.setDigitCount(4)
+        self.pv.setNumDigits(5)
+        self.pv.setDigitCount(5)
         self.pv.setSegmentStyle(QtGui.QLCDNumber.Flat)
         self.pv.setObjectName(_fromUtf8("pv"))
         self.sp = QtGui.QSpinBox(self.centralwidget)
-        self.sp.setGeometry(QtCore.QRect(120, 129, 63, 31))
+        self.sp.setGeometry(QtCore.QRect(130, 120, 81, 31))
         self.sp.setMinimum(100)
-        self.sp.setMaximum(900)
-        self.sp.setProperty("value", 512)
+        self.sp.setMaximum(15000)
+        self.sp.setSingleStep(100)
+        self.sp.setProperty("value", 2000)
         self.sp.setObjectName(_fromUtf8("sp"))
         self.layoutWidget = QtGui.QWidget(self.centralwidget)
-        self.layoutWidget.setGeometry(QtCore.QRect(60, 260, 121, 41))
+        self.layoutWidget.setGeometry(QtCore.QRect(40, 350, 131, 41))
         self.layoutWidget.setObjectName(_fromUtf8("layoutWidget"))
         self.formLayout_2 = QtGui.QFormLayout(self.layoutWidget)
         self.formLayout_2.setFieldGrowthPolicy(QtGui.QFormLayout.AllNonFixedFieldsGrow)
@@ -49,7 +59,7 @@ class Ui_MainWindow(object):
         self.formLayout_2.setObjectName(_fromUtf8("formLayout_2"))
         self.Ts = QtGui.QSpinBox(self.layoutWidget)
         self.Ts.setMinimum(10)
-        self.Ts.setMaximum(50)
+        self.Ts.setMaximum(100)
         self.Ts.setProperty("value", 15)
         self.Ts.setObjectName(_fromUtf8("Ts"))
         self.formLayout_2.setWidget(0, QtGui.QFormLayout.LabelRole, self.Ts)
@@ -57,25 +67,28 @@ class Ui_MainWindow(object):
         self.label_4.setObjectName(_fromUtf8("label_4"))
         self.formLayout_2.setWidget(0, QtGui.QFormLayout.FieldRole, self.label_4)
         self.Kp = QtGui.QDoubleSpinBox(self.centralwidget)
-        self.Kp.setGeometry(QtCore.QRect(447, 63, 71, 31))
+        self.Kp.setGeometry(QtCore.QRect(490, 60, 81, 31))
         self.Kp.setAutoFillBackground(False)
+        self.Kp.setDecimals(3)
         self.Kp.setMaximum(999.9)
-        self.Kp.setSingleStep(0.1)
+        self.Kp.setSingleStep(0.01)
         self.Kp.setProperty("value", 1.0)
         self.Kp.setObjectName(_fromUtf8("Kp"))
         self.Kd = QtGui.QDoubleSpinBox(self.centralwidget)
-        self.Kd.setGeometry(QtCore.QRect(428, 239, 71, 31))
+        self.Kd.setGeometry(QtCore.QRect(470, 240, 81, 31))
+        self.Kd.setDecimals(3)
         self.Kd.setMaximum(999.9)
-        self.Kd.setSingleStep(0.1)
+        self.Kd.setSingleStep(0.001)
         self.Kd.setObjectName(_fromUtf8("Kd"))
         self.Ki = QtGui.QDoubleSpinBox(self.centralwidget)
-        self.Ki.setGeometry(QtCore.QRect(428, 150, 71, 31))
+        self.Ki.setGeometry(QtCore.QRect(470, 150, 81, 31))
+        self.Ki.setDecimals(3)
         self.Ki.setMaximum(999.9)
-        self.Ki.setSingleStep(0.1)
+        self.Ki.setSingleStep(0.01)
         self.Ki.setObjectName(_fromUtf8("Ki"))
         self.pid_off = QtGui.QLabel(self.centralwidget)
         self.pid_off.setEnabled(True)
-        self.pid_off.setGeometry(QtCore.QRect(61, 43, 911, 301))
+        self.pid_off.setGeometry(QtCore.QRect(60, 40, 1021, 301))
         font = QtGui.QFont()
         font.setKerning(True)
         self.pid_off.setFont(font)
@@ -84,7 +97,7 @@ class Ui_MainWindow(object):
         self.pid_off.setScaledContents(True)
         self.pid_off.setObjectName(_fromUtf8("pid_off"))
         self.layoutWidget1 = QtGui.QWidget(self.centralwidget)
-        self.layoutWidget1.setGeometry(QtCore.QRect(10, 370, 971, 281))
+        self.layoutWidget1.setGeometry(QtCore.QRect(20, 410, 1171, 431))
         self.layoutWidget1.setObjectName(_fromUtf8("layoutWidget1"))
         self.horizontalLayout = QtGui.QHBoxLayout(self.layoutWidget1)
         self.horizontalLayout.setMargin(0)
@@ -96,7 +109,7 @@ class Ui_MainWindow(object):
         self.plot_e.setObjectName(_fromUtf8("plot_e"))
         self.horizontalLayout.addWidget(self.plot_e)
         self.e = QtGui.QLCDNumber(self.centralwidget)
-        self.e.setGeometry(QtCore.QRect(266, 130, 61, 31))
+        self.e.setGeometry(QtCore.QRect(290, 130, 71, 31))
         font = QtGui.QFont()
         font.setBold(False)
         font.setWeight(50)
@@ -108,11 +121,11 @@ class Ui_MainWindow(object):
         self.e.setSegmentStyle(QtGui.QLCDNumber.Flat)
         self.e.setObjectName(_fromUtf8("e"))
         self.label = QtGui.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(850, 10, 141, 31))
+        self.label.setGeometry(QtCore.QRect(1060, 20, 131, 41))
         self.label.setObjectName(_fromUtf8("label"))
         self.pid_on = QtGui.QLabel(self.centralwidget)
         self.pid_on.setEnabled(True)
-        self.pid_on.setGeometry(QtCore.QRect(61, 43, 911, 301))
+        self.pid_on.setGeometry(QtCore.QRect(60, 40, 1021, 301))
         font = QtGui.QFont()
         font.setKerning(True)
         self.pid_on.setFont(font)
@@ -146,9 +159,9 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "Control PID con Arduino", None, QtGui.QApplication.UnicodeUTF8))
-        self.label_4.setText(QtGui.QApplication.translate("MainWindow", "Ts [ms]", None, QtGui.QApplication.UnicodeUTF8))
-        self.label.setText(QtGui.QApplication.translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; color:#0000ff;\">CITEDEF - DVA</span></p></body></html>", None, QtGui.QApplication.UnicodeUTF8))
-        self.boton_pid_on.setText(QtGui.QApplication.translate("MainWindow", "ON", None, QtGui.QApplication.UnicodeUTF8))
-        self.boton_pid_off.setText(QtGui.QApplication.translate("MainWindow", "OFF", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Control PID con Arduino", None))
+        self.label_4.setText(_translate("MainWindow", "Ts [ms]", None))
+        self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; color:#0000ff;\">CITEDEF - DVA</span></p></body></html>", None))
+        self.boton_pid_on.setText(_translate("MainWindow", "ON", None))
+        self.boton_pid_off.setText(_translate("MainWindow", "OFF", None))
 

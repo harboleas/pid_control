@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1002</width>
-    <height>685</height>
+    <width>1251</width>
+    <height>901</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QLCDNumber" name="pv">
     <property name="geometry">
      <rect>
-      <x>886</x>
-      <y>130</y>
-      <width>61</width>
+      <x>990</x>
+      <y>120</y>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
@@ -37,10 +37,10 @@
      <enum>QFrame::Plain</enum>
     </property>
     <property name="numDigits">
-     <number>4</number>
+     <number>5</number>
     </property>
     <property name="digitCount">
-     <number>4</number>
+     <number>5</number>
     </property>
     <property name="segmentStyle">
      <enum>QLCDNumber::Flat</enum>
@@ -49,9 +49,9 @@
    <widget class="QSpinBox" name="sp">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>129</y>
-      <width>63</width>
+      <x>130</x>
+      <y>120</y>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
@@ -59,18 +59,21 @@
      <number>100</number>
     </property>
     <property name="maximum">
-     <number>900</number>
+     <number>15000</number>
+    </property>
+    <property name="singleStep">
+     <number>100</number>
     </property>
     <property name="value">
-     <number>512</number>
+     <number>2000</number>
     </property>
    </widget>
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>260</y>
-      <width>121</width>
+      <x>40</x>
+      <y>350</y>
+      <width>131</width>
       <height>41</height>
      </rect>
     </property>
@@ -84,7 +87,7 @@
         <number>10</number>
        </property>
        <property name="maximum">
-        <number>50</number>
+        <number>100</number>
        </property>
        <property name="value">
         <number>15</number>
@@ -103,20 +106,23 @@
    <widget class="QDoubleSpinBox" name="Kp">
     <property name="geometry">
      <rect>
-      <x>447</x>
-      <y>63</y>
-      <width>71</width>
+      <x>490</x>
+      <y>60</y>
+      <width>81</width>
       <height>31</height>
      </rect>
     </property>
     <property name="autoFillBackground">
      <bool>false</bool>
     </property>
+    <property name="decimals">
+     <number>3</number>
+    </property>
     <property name="maximum">
      <double>999.899999999999977</double>
     </property>
     <property name="singleStep">
-     <double>0.100000000000000</double>
+     <double>0.010000000000000</double>
     </property>
     <property name="value">
      <double>1.000000000000000</double>
@@ -125,33 +131,39 @@
    <widget class="QDoubleSpinBox" name="Kd">
     <property name="geometry">
      <rect>
-      <x>428</x>
-      <y>239</y>
-      <width>71</width>
+      <x>470</x>
+      <y>240</y>
+      <width>81</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="decimals">
+     <number>3</number>
     </property>
     <property name="maximum">
      <double>999.899999999999977</double>
     </property>
     <property name="singleStep">
-     <double>0.100000000000000</double>
+     <double>0.001000000000000</double>
     </property>
    </widget>
    <widget class="QDoubleSpinBox" name="Ki">
     <property name="geometry">
      <rect>
-      <x>428</x>
+      <x>470</x>
       <y>150</y>
-      <width>71</width>
+      <width>81</width>
       <height>31</height>
      </rect>
+    </property>
+    <property name="decimals">
+     <number>3</number>
     </property>
     <property name="maximum">
      <double>999.899999999999977</double>
     </property>
     <property name="singleStep">
-     <double>0.100000000000000</double>
+     <double>0.010000000000000</double>
     </property>
    </widget>
    <widget class="QLabel" name="pid_off">
@@ -160,9 +172,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>61</x>
-      <y>43</y>
-      <width>911</width>
+      <x>60</x>
+      <y>40</y>
+      <width>1021</width>
       <height>301</height>
      </rect>
     </property>
@@ -184,10 +196,10 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>370</y>
-      <width>971</width>
-      <height>281</height>
+      <x>20</x>
+      <y>410</y>
+      <width>1171</width>
+      <height>431</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -202,9 +214,9 @@
    <widget class="QLCDNumber" name="e">
     <property name="geometry">
      <rect>
-      <x>266</x>
+      <x>290</x>
       <y>130</y>
-      <width>61</width>
+      <width>71</width>
       <height>31</height>
      </rect>
     </property>
@@ -231,10 +243,10 @@
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>850</x>
-      <y>10</y>
-      <width>141</width>
-      <height>31</height>
+      <x>1060</x>
+      <y>20</y>
+      <width>131</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="text">
@@ -247,9 +259,9 @@
     </property>
     <property name="geometry">
      <rect>
-      <x>61</x>
-      <y>43</y>
-      <width>911</width>
+      <x>60</x>
+      <y>40</y>
+      <width>1021</width>
       <height>301</height>
      </rect>
     </property>
@@ -297,9 +309,9 @@
      </item>
     </layout>
    </widget>
+   <zorder>pid_off</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>pid_on</zorder>
-   <zorder>pid_off</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>sp</zorder>
