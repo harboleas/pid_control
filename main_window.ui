@@ -240,19 +240,6 @@
      <enum>QLCDNumber::Flat</enum>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>1060</x>
-      <y>20</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt; color:#0000ff;&quot;&gt;CITEDEF - DVA&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="pid_on">
     <property name="enabled">
      <bool>true</bool>
@@ -320,7 +307,6 @@
    <zorder>Kd</zorder>
    <zorder>pv</zorder>
    <zorder>e</zorder>
-   <zorder>label</zorder>
   </widget>
  </widget>
  <customwidgets>

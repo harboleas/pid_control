@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'main_window.ui'
 #
-# Created: Wed Jun 15 12:09:22 2016
+# Created: Fri Jun 24 13:46:24 2016
 #      by: PyQt4 UI code generator 4.11.2
 #
 # WARNING! All changes made in this file will be lost!
@@ -120,9 +120,6 @@ class Ui_MainWindow(object):
         self.e.setNumDigits(5)
         self.e.setSegmentStyle(QtGui.QLCDNumber.Flat)
         self.e.setObjectName(_fromUtf8("e"))
-        self.label = QtGui.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(1060, 20, 131, 41))
-        self.label.setObjectName(_fromUtf8("label"))
         self.pid_on = QtGui.QLabel(self.centralwidget)
         self.pid_on.setEnabled(True)
         self.pid_on.setGeometry(QtCore.QRect(60, 40, 1021, 301))
@@ -161,7 +158,6 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(_translate("MainWindow", "Control PID con Arduino", None))
         self.label_4.setText(_translate("MainWindow", "Ts [ms]", None))
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p><span style=\" font-size:14pt; color:#0000ff;\">CITEDEF - DVA</span></p></body></html>", None))
         self.boton_pid_on.setText(_translate("MainWindow", "ON", None))
         self.boton_pid_off.setText(_translate("MainWindow", "OFF", None))
 
