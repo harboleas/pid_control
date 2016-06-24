@@ -27,7 +27,7 @@ Soporte del motor :
 
 ![soporte](soporte/ensamblaje.jpg)
 
-El soporte tambien esta en [thingiverse](www.thingiverse.com/thing:1643604)
+El soporte tambien esta en [thingiverse](http://www.thingiverse.com/thing:1643604)
 
 ![foto](soporte/foto.jpg)
 
