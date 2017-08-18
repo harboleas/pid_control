@@ -18,10 +18,6 @@ Circuito :
 
 ![circuito](circuito.jpg)
 
-Nota : 
-Este driver, con un solo transistor, produce una asimetria en el control al no
-poder invertir la polaridad del motor.
-
 Soporte del motor : 
 
 ![soporte](soporte/ensamblaje.jpg)

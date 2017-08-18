@@ -7,10 +7,6 @@
 #   Implementacion de un control PID en un Arduino Nano con 
 #   parametros ajustables a traves de una GUI 
 #
-#   Nota : Al utilizar un solo Mosfet como driver del motor,
-#   no puedo invertir la polaridad y el control resulta
-#   asimetrico.
-#
 # Author:
 #   Hugo Arboleas <harboleas@citedef.gob.ar>
 #
@@ -37,6 +33,7 @@
 //////////////////////////////
 ///// Definicion de pines
 #define pin_mot_A 9    
+#define pin_mot_B 10    
 #define pin_pv 3
 #define pin_led 13
 
@@ -80,7 +77,7 @@ unsigned long t = 0, t_1 = 0; // para la medicion del delta t de muestreo
 /////////////////////////////////
 // Limites de la senal de control
 #define U_MAX 255    
-#define U_MIN 0
+#define U_MIN -255
 
 
 void setup()
@@ -134,11 +131,22 @@ void pid()
             else if (u < U_MIN)
                 u = U_MIN;
 
-            analogWrite(pin_mot_A, u);
+            if (u >= 0) 
+            {
+                analogWrite(pin_mot_B, 0);
+                analogWrite(pin_mot_A, u);
+            }
+            else 
+            {
+                analogWrite(pin_mot_A, 0);
+                analogWrite(pin_mot_B, -u);
+            }
+
         }        
         else   // PID Off
         {
                 analogWrite(pin_mot_A, 0);
+                analogWrite(pin_mot_B, 0);
                 e_1 = e;   // Actualiza error anterior
                 acum_e = 0;
                 d_e = 0;
