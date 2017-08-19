@@ -85,6 +85,7 @@ void setup()
     Serial.begin(115200);    // Inicializar puerto serie
 
     pinMode(pin_mot_A, OUTPUT);
+    pinMode(pin_mot_B, OUTPUT);
     pinMode(pin_led, OUTPUT);
     pinMode(pin_pv, INPUT);
     attachInterrupt(1, contar, RISING);
