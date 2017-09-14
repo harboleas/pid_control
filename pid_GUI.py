@@ -29,7 +29,7 @@
 #
 #############################################################################
 
-from PyQt4 import QtCore 
+from PyQt4 import QtCore
 from PyQt4 import QtGui
 from PyQt4.Qwt5 import *
 from main_window import *
@@ -39,27 +39,27 @@ import struct
 import time
 
 
-class Adquisicion(QtCore.QThread) :   
+class Adquisicion(QtCore.QThread):
     "Thread para la adquisicion de datos serie"
 
-    def __init__(self, port) :
-        QtCore.QThread.__init__(self)
+    def __init__(self, port):
+        super(Adquisicion, self).__init__()
 
         self.port = port
-                
-    def run(self) :
-        while True :
+
+    def run(self):
+        while True:
             # Leo la process variable (2 Bytes) enviada por el arduino  
-            data_read = self.port.read(2) 
+            data_read = self.port.read(2)
             if len(data_read) == 2 :
                 data = struct.unpack("h", data_read)[0]   # convierte 2 bytes a int 
-                self.emit(QtCore.SIGNAL("data_ready"), data) 
-            self.msleep(5)    
-         
+                self.emit(QtCore.SIGNAL("data_ready"), data)
+            self.msleep(5)
 
-class App(QtGui.QMainWindow) :
 
-    def __init__(self) :
+class App(QtGui.QMainWindow):
+
+    def __init__(self):
 
         self.app = QtGui.QApplication(sys.argv)
         QtGui.QWidget.__init__(self)
@@ -70,8 +70,8 @@ class App(QtGui.QMainWindow) :
         self.main_win.pid_on.lower()
         self.main_win.pid_off.lower()
         self.main_win.pid_on.setVisible(False)
-        
-        try :
+
+        try:
             # Provoco un reset del Arduino para una conexion limpia
             arduino = serial.Serial("/dev/ttyUSB0")
             arduino.setDTR(False)
@@ -80,17 +80,17 @@ class App(QtGui.QMainWindow) :
             arduino.setDTR(True)
             arduino.close()
 
-            self.port = serial.Serial("/dev/ttyUSB0", 115200, timeout = 0)    
-        except :
+            self.port = serial.Serial("/dev/ttyUSB0", 115200, timeout = 0)
+        except:
             self.port = None
             print("No se puede abrir el puerto")
-	else :
+	else:
             self.adquisicion = Adquisicion(self.port)
             QtCore.QObject.connect(self.adquisicion, QtCore.SIGNAL("data_ready"), self.update_data)
-	    self.adquisicion.start()
+            self.adquisicion.start()
 
-        self.main_win.plot.insertLegend(QwtLegend(), QwtPlot.BottomLegend) 
-        self.main_win.plot_e.insertLegend(QwtLegend(), QwtPlot.BottomLegend) 
+        self.main_win.plot.insertLegend(QwtLegend(), QwtPlot.BottomLegend)
+        self.main_win.plot_e.insertLegend(QwtLegend(), QwtPlot.BottomLegend)
 
         self.main_win.plot.setCanvasBackground(QtCore.Qt.black)
         self.main_win.plot.setAxisScale(0, 0, 10000)
@@ -108,7 +108,7 @@ class App(QtGui.QMainWindow) :
         self.e_graf.attach(self.main_win.plot_e)
         self.e_graf.setPen(QtGui.QPen(QtCore.Qt.red, 2))
 
-        self.pv_y = [0 for i in range(300)]   
+        self.pv_y = [0 for i in range(300)]
         self.sp_y = [0 for i in range(300)]
         self.e_y = [0 for i in range(300)]
         self.x = range(300)
@@ -117,15 +117,15 @@ class App(QtGui.QMainWindow) :
         self.set_param()
         self.show()
         self.app.exec_()        # Lazo principal
-    
-    def set_param(self) :
+
+    def set_param(self):
 
         self.sp = self.main_win.sp.value()
         self.Ts = self.main_win.Ts.value()
         self.Kp = self.main_win.Kp.value()
         self.Ki = self.main_win.Ki.value()
         self.Kd = self.main_win.Kd.value()
-        if self.port :
+        if self.port:
             self.port.write(struct.pack("B", self.pid_on))     # Envia 1 byte (PID on/off)
             self.port.write(struct.pack("B", self.Ts))         # Envia 1 byte (Ts = Tiempo de muestreo)
             self.port.write(struct.pack("f", self.Kp))         # Envia 4 bytes (Kp)
@@ -133,7 +133,7 @@ class App(QtGui.QMainWindow) :
             self.port.write(struct.pack("f", self.Kd))         # Envia 4 bytes (Kd)
             self.port.write(struct.pack("h", self.sp))         # Envia 2 bytes (Set Point)
 
-    def on(self) :          
+    def on(self):
 
         self.main_win.boton_pid_on.setDisabled(True)
         self.main_win.boton_pid_off.setEnabled(True)
@@ -142,7 +142,7 @@ class App(QtGui.QMainWindow) :
         self.pid_on = 1
         self.set_param()
 
-    def off(self) :
+    def off(self):
 
         self.main_win.boton_pid_on.setEnabled(True)
         self.main_win.boton_pid_off.setDisabled(True)
@@ -151,18 +151,18 @@ class App(QtGui.QMainWindow) :
         self.pid_on = 0
         self.set_param()
 
-    def update_data(self, data) :
+    def update_data(self, data):
 
         # Actualiza los datos de los graficos
         # cada vez que recibe un dato del arduino (cada Ts ms)
 
-        self.pv_y = self.pv_y[1:] + [data] 
+        self.pv_y = self.pv_y[1:] + [data]
         self.sp_y = self.sp_y[1:] + [self.sp]
         self.e_y = self.e_y[1:] + [self.sp - data]
 
         self.main_win.pv.display(data)
         self.main_win.e.display(self.sp - data)
-        
+
         self.pv_graf.setData(self.x, self.pv_y)
         self.sp_graf.setData(self.x, self.sp_y)
         self.e_graf.setData(self.x, self.e_y)
@@ -170,7 +170,7 @@ class App(QtGui.QMainWindow) :
         self.main_win.plot.replot()
         self.main_win.plot_e.replot()
 
-if __name__ == "__main__" :   
-    app = App()         
+if __name__ == "__main__":
+    app = App()
 
 # vim: set ts=8 sw=4 tw=0 et :
