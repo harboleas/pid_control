@@ -62,7 +62,7 @@ class App(QtGui.QMainWindow):
     def __init__(self):
 
         self.app = QtGui.QApplication(sys.argv)
-        QtGui.QWidget.__init__(self)
+        QtGui.QMainWindow.__init__(self)
 
         self.main_win = Ui_MainWindow()
         self.main_win.setupUi(self)
